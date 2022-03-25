@@ -1,0 +1,21 @@
+#!/bin/bash -l
+
+#$ -P bf528
+#$ -cwd
+#$ -j y
+#$ -pe mpi_16_tasks_per_node 16
+
+echo "Running job $JOB_ID"
+echo "Started: $(date +%F)"
+echo "Running in directory: $PWD"
+
+module load sratoolkit
+fastq-dump -I --split-files /projectnb/bf528/users/hedgehog_2022/Project2/P0_1/SRR1727914/P0_1.sra
+fastqc -O /projectnb/bf528/users/hedgehog_2022/project2/Data-Project2/P0_1
+
+echo "Job finished: $(date +%F)"
+
+# OUTSIDE OF SCRIPT: Run qsub job to convert SRA to paired FASTQ files 
+# qsub run_extract.qsub
+# OUTSIDE OF SCRIPT: Run fastqc [-o output directory] to get quality scores
+# fastqc -o /projectnb2/bf528/users/tinman/project2/data_curator P0_1_1.fastq P0_1_2.fastq
